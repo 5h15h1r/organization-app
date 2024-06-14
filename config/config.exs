@@ -7,6 +7,10 @@
 # General application configuration
 import Config
 
+if config_env() in [:dev, :test] do
+  import_config ".env.exs"
+end
+
 config :organization_api,
   ecto_repos: [OrganizationApi.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
