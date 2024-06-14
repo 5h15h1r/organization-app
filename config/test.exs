@@ -8,8 +8,8 @@ import Config
 config :organization_api, OrganizationApi.Repo,
   username: System.get_env("POSTGRES_USERNAME"),
   password: System.get_env("POSTGRES_PASSWORD"),
-  hostname: System.get_env("POSTGRES_HOSTNAME"),
-  database: "#{System.get_env("POSTGRES_TEST_DATABASE")}#{System.get_env("MIX_TEST_PARTITION")}",
+  hostname: "localhost",
+  database: "organization_api_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
