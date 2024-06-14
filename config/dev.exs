@@ -4,8 +4,8 @@ import Config
 config :organization_api, OrganizationApi.Repo,
   username: System.get_env("POSTGRES_USERNAME"),
   password: System.get_env("POSTGRES_PASSWORD"),
-  hostname: System.get_env("POSTGRES_HOSTNAME"),
-  database: System.get_env("POSTGRES_DEV_DATABASE"),
+  hostname: "localhost",
+  database: "organization_api_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
