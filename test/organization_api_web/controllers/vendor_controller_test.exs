@@ -2,7 +2,7 @@ defmodule OrganizationApiWeb.VendorControllerTest do
   use OrganizationApiWeb.ConnCase
 
   import OrganizationApi.VendorsFixtures
-
+  import OrganizationApi.OrganizationsFixtures
   alias OrganizationApi.Vendors.Vendor
 
   @create_attrs %{
@@ -29,8 +29,12 @@ defmodule OrganizationApiWeb.VendorControllerTest do
   end
 
   describe "create vendor" do
-    test "renders vendor when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/api/vendors", vendor: @create_attrs)
+    setup [:create_organization]
+
+    test "renders vendor when data is valid", %{conn: conn, organization: organization} do
+      valid_attrs = Map.put(@create_attrs, :organization_id, organization.id)
+
+      conn = post(conn, ~p"/api/vendors", vendor: valid_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
       conn = get(conn, ~p"/api/vendors/#{id}")
@@ -83,6 +87,11 @@ defmodule OrganizationApiWeb.VendorControllerTest do
         get(conn, ~p"/api/vendors/#{vendor}")
       end
     end
+  end
+
+  defp create_organization(_) do
+    organization = organization_fixture()
+    %{organization: organization}
   end
 
   defp create_vendor(_) do
