@@ -8,7 +8,7 @@ defmodule OrganizationApi.Organizations.Organization do
     field :name, :string
     field :logo_url, :string
     field :configurations, :map
-
+    has_many :vendors , OrganizationApi.Vendors.Vendor
     timestamps(type: :utc_datetime)
   end
 

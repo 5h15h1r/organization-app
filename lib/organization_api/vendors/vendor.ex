@@ -8,7 +8,7 @@ defmodule OrganizationApi.Vendors.Vendor do
     field :name, :string
     field :phone, :string
     field :email, :string
-    field :organization_id, :binary_id
+    belongs_to :organization, OrganizationApi.Organizations.Organization
 
     timestamps(type: :utc_datetime)
   end
@@ -16,8 +16,9 @@ defmodule OrganizationApi.Vendors.Vendor do
   @doc false
   def changeset(vendor, attrs) do
     vendor
-    |> cast(attrs, [:name, :phone, :email])
-    |> validate_required([:name, :phone, :email])
+    |> cast(attrs, [:name, :phone, :email, :organization_id])
+    |> validate_required([:name, :phone, :email, :organization_id])
     |> unique_constraint(:name)
+    |> assoc_constraint(:organization)
   end
 end
