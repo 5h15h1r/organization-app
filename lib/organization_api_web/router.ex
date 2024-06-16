@@ -8,5 +8,6 @@ defmodule OrganizationApiWeb.Router do
   scope "/api", OrganizationApiWeb do
     pipe_through :api
     resources "/organizations", OrganizationController, except: [:new, :edit]
+    resources "/vendors", VendorController, except: [:new, :edit]
   end
 end
