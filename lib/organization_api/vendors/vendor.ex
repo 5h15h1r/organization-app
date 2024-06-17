@@ -17,7 +17,7 @@ defmodule OrganizationApi.Vendors.Vendor do
   def changeset(vendor, attrs) do
     vendor
     |> cast(attrs, [:name, :phone, :email, :organization_id])
-    |> validate_required([:name, :phone, :email, :organization_id])
+    |> validate_required([:name, :organization_id])
     |> unique_constraint(:name)
     |> assoc_constraint(:organization)
   end
