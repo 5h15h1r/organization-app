@@ -18,7 +18,7 @@ defmodule OrganizationApiWeb.VendorControllerTest do
   @invalid_attrs %{name: nil, phone: nil, email: nil}
 
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    {:ok, conn: put_req_header(conn, "accept", "application/json"), organization: organization_fixture()}
   end
 
   describe "index" do
@@ -29,7 +29,6 @@ defmodule OrganizationApiWeb.VendorControllerTest do
   end
 
   describe "create vendor" do
-    setup [:create_organization]
 
     test "renders vendor when data is valid", %{conn: conn, organization: organization} do
       valid_attrs = Map.put(@create_attrs, :organization_id, organization.id)
@@ -87,11 +86,6 @@ defmodule OrganizationApiWeb.VendorControllerTest do
         get(conn, ~p"/api/vendors/#{vendor}")
       end
     end
-  end
-
-  defp create_organization(_) do
-    organization = organization_fixture()
-    %{organization: organization}
   end
 
   defp create_vendor(_) do
