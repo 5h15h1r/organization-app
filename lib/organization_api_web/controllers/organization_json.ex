@@ -5,14 +5,14 @@ defmodule OrganizationApiWeb.OrganizationJSON do
   Renders a list of organizations.
   """
   def index(%{organizations: organizations}) do
-    %{data: for(organization <- organizations, do: data(organization))}
+    for(organization <- organizations, do: data(organization))
   end
 
   @doc """
   Renders a single organization.
   """
   def show(%{organization: organization}) do
-    %{data: data(organization)}
+    data(organization)
   end
 
   defp data(%Organization{} = organization) do

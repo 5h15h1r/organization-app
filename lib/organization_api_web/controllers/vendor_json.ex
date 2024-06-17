@@ -5,14 +5,14 @@ defmodule OrganizationApiWeb.VendorJSON do
   Renders a list of vendors.
   """
   def index(%{vendors: vendors}) do
-    %{data: for(vendor <- vendors, do: data(vendor))}
+    for(vendor <- vendors, do: data(vendor))
   end
 
   @doc """
   Renders a single vendor.
   """
   def show(%{vendor: vendor}) do
-    %{data: data(vendor)}
+    data(vendor)
   end
 
   defp data(%Vendor{} = vendor) do
