@@ -24,14 +24,14 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
   describe "index" do
     test "lists all organizations", %{conn: conn} do
       conn = get(conn, ~p"/api/organizations")
-      assert json_response(conn, 200)["data"] == []
+      assert json_response(conn, 200) == []
     end
   end
 
   describe "create organization" do
     test "renders organization when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/organizations", organization: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert %{"id" => id} = json_response(conn, 201)
 
       conn = get(conn, ~p"/api/organizations/#{id}")
 
@@ -40,7 +40,7 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
                "configurations" => %{},
                "logo_url" => "some logo_url",
                "name" => "some name"
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -54,7 +54,7 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
 
     test "renders organization when data is valid", %{conn: conn, organization: %Organization{id: id} = organization} do
       conn = put(conn, ~p"/api/organizations/#{organization}", organization: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      assert %{"id" => ^id} = json_response(conn, 200)
 
       conn = get(conn, ~p"/api/organizations/#{id}")
 
@@ -63,7 +63,7 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
                "configurations" => %{},
                "logo_url" => "some updated logo_url",
                "name" => "some updated name"
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)
     end
 
     test "renders errors when data is invalid", %{conn: conn, organization: organization} do
