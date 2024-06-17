@@ -53,6 +53,7 @@ defmodule OrganizationApi.Vendors do
     %Vendor{}
     |> Vendor.changeset(attrs)
     |> Repo.insert()
+    |> handle_repo_result("Unable to create the vendor")
   end
 
   @doc """
@@ -71,6 +72,7 @@ defmodule OrganizationApi.Vendors do
     vendor
     |> Vendor.changeset(attrs)
     |> Repo.update()
+    |> handle_repo_result("Unable to update the vendor")
   end
 
   @doc """
@@ -86,7 +88,9 @@ defmodule OrganizationApi.Vendors do
 
   """
   def delete_vendor(%Vendor{} = vendor) do
-    Repo.delete(vendor)
+    vendor
+    |> Repo.delete()
+    |> handle_repo_result("Unable to delete the vendor")
   end
 
   @doc """
@@ -101,4 +105,9 @@ defmodule OrganizationApi.Vendors do
   def change_vendor(%Vendor{} = vendor, attrs \\ %{}) do
     Vendor.changeset(vendor, attrs)
   end
+
+  defp handle_repo_result({:ok, result}, _error_message), do: {:ok, result}
+  defp handle_repo_result({:error, %Ecto.Changeset{} = changeset}, _error_message), do: {:error, changeset}
+  defp handle_repo_result({:error, _reason}, error_message), do: {:error, error_message}
+  defp handle_repo_result(nil, error_message), do: {:error, error_message}
 end

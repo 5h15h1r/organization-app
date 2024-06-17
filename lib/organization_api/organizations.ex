@@ -53,6 +53,7 @@ defmodule OrganizationApi.Organizations do
     %Organization{}
     |> Organization.changeset(attrs)
     |> Repo.insert()
+    |> handle_repo_result("Unable to create the organization.")
   end
 
   @doc """
@@ -71,6 +72,7 @@ defmodule OrganizationApi.Organizations do
     organization
     |> Organization.changeset(attrs)
     |> Repo.update()
+    |> handle_repo_result("Unable to update the organization.")
   end
 
   @doc """
@@ -86,7 +88,9 @@ defmodule OrganizationApi.Organizations do
 
   """
   def delete_organization(%Organization{} = organization) do
-    Repo.delete(organization)
+    organization
+    |> Repo.delete()
+    |> handle_repo_result("Unable to delete the organization.")
   end
 
   @doc """
@@ -101,4 +105,9 @@ defmodule OrganizationApi.Organizations do
   def change_organization(%Organization{} = organization, attrs \\ %{}) do
     Organization.changeset(organization, attrs)
   end
+
+  defp handle_repo_result({:ok, result}, _error_message), do: {:ok, result}
+  defp handle_repo_result({:error, %Ecto.Changeset{} = changeset}, _error_message), do: {:error, changeset}
+  defp handle_repo_result({:error, _reason}, error_message), do: {:error, error_message}
+  defp handle_repo_result(nil, error_message), do: {:error, error_message}
 end
