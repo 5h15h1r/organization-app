@@ -21,4 +21,11 @@ defmodule OrganizationApiWeb.FallbackController do
     |> put_view(html: OrganizationApiWeb.ErrorHTML, json: OrganizationApiWeb.ErrorJSON)
     |> render(:"404")
   end
+
+  def call(conn, {:error, message}) do
+    conn
+    |> put_status(:unprocessable_entity)
+    |> json(%{error: message})
+  end
+
 end

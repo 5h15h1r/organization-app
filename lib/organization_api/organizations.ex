@@ -4,8 +4,9 @@ defmodule OrganizationApi.Organizations do
   """
 
   import Ecto.Query, warn: false
-  alias OrganizationApi.Repo
+  import OrganizationApi.HandleError
 
+  alias OrganizationApi.Repo
   alias OrganizationApi.Organizations.Organization
 
   @doc """
@@ -53,6 +54,7 @@ defmodule OrganizationApi.Organizations do
     %Organization{}
     |> Organization.changeset(attrs)
     |> Repo.insert()
+    |> handle_repo_result("Unable to create the organization.")
   end
 
   @doc """
@@ -71,6 +73,7 @@ defmodule OrganizationApi.Organizations do
     organization
     |> Organization.changeset(attrs)
     |> Repo.update()
+    |> handle_repo_result("Unable to update the organization.")
   end
 
   @doc """
@@ -86,7 +89,9 @@ defmodule OrganizationApi.Organizations do
 
   """
   def delete_organization(%Organization{} = organization) do
-    Repo.delete(organization)
+    organization
+    |> Repo.delete()
+    |> handle_repo_result("Unable to delete the organization.")
   end
 
   @doc """
@@ -101,4 +106,5 @@ defmodule OrganizationApi.Organizations do
   def change_organization(%Organization{} = organization, attrs \\ %{}) do
     Organization.changeset(organization, attrs)
   end
+
 end
