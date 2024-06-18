@@ -4,6 +4,8 @@ defmodule OrganizationApi.Vendors do
   """
 
   import Ecto.Query, warn: false
+  import OrganizationApi.HandleError
+
   alias OrganizationApi.Repo
 
   alias OrganizationApi.Vendors.Vendor
@@ -106,8 +108,4 @@ defmodule OrganizationApi.Vendors do
     Vendor.changeset(vendor, attrs)
   end
 
-  defp handle_repo_result({:ok, result}, _error_message), do: {:ok, result}
-  defp handle_repo_result({:error, %Ecto.Changeset{} = changeset}, _error_message), do: {:error, changeset}
-  defp handle_repo_result({:error, _reason}, error_message), do: {:error, error_message}
-  defp handle_repo_result(nil, error_message), do: {:error, error_message}
 end

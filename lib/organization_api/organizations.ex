@@ -4,8 +4,9 @@ defmodule OrganizationApi.Organizations do
   """
 
   import Ecto.Query, warn: false
-  alias OrganizationApi.Repo
+  import OrganizationApi.HandleError
 
+  alias OrganizationApi.Repo
   alias OrganizationApi.Organizations.Organization
 
   @doc """
@@ -106,8 +107,4 @@ defmodule OrganizationApi.Organizations do
     Organization.changeset(organization, attrs)
   end
 
-  defp handle_repo_result({:ok, result}, _error_message), do: {:ok, result}
-  defp handle_repo_result({:error, %Ecto.Changeset{} = changeset}, _error_message), do: {:error, changeset}
-  defp handle_repo_result({:error, _reason}, error_message), do: {:error, error_message}
-  defp handle_repo_result(nil, error_message), do: {:error, error_message}
 end
