@@ -20,7 +20,7 @@ defmodule OrganizationApi.Organizations do
   """
   def list_organizations do
     Organization
-    |> where([o], o.is_active==true)
+    |> where(is_active: true)
     |> Repo.all()
   end
 
@@ -40,7 +40,7 @@ defmodule OrganizationApi.Organizations do
   """
   def get_organization!(id) do
     Organization
-    |> where([o], o.is_active==true)
+    |> where(is_active: true)
     |> Repo.get!(id)
 
   end

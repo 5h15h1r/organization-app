@@ -21,7 +21,7 @@ defmodule OrganizationApi.Vendors do
   """
   def list_vendors do
     Vendor
-    |> where([v], v.is_active==true)
+    |> where(is_active: true)
     |> Repo.all()
   end
 
@@ -41,7 +41,7 @@ defmodule OrganizationApi.Vendors do
   """
   def get_vendor!(id) do
   Vendor
-  |> where([v], v.is_active==true)
+  |> where(is_active: true)
   |> Repo.get!(id)
   end
   @doc """
