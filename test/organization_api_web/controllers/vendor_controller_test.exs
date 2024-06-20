@@ -4,6 +4,7 @@ defmodule OrganizationApiWeb.VendorControllerTest do
   import OrganizationApi.VendorsFixtures
   import OrganizationApi.OrganizationsFixtures
   alias OrganizationApi.Vendors.Vendor
+  alias OrganizationApi.Repo
 
   @create_attrs %{
     name: "some name",
@@ -81,6 +82,9 @@ defmodule OrganizationApiWeb.VendorControllerTest do
     test "deletes chosen vendor", %{conn: conn, vendor: vendor} do
       conn = delete(conn, ~p"/api/vendors/#{vendor}")
       assert response(conn, 204)
+
+      deleted_vendor = Repo.get!(Vendor, vendor.id)
+      assert deleted_vendor.is_active == false
 
       assert_error_sent 404, fn ->
         get(conn, ~p"/api/vendors/#{vendor}")
