@@ -36,7 +36,7 @@ defmodule OrganizationApiWeb.VendorController do
   def delete(conn, %{"id" => id}) do
     vendor = Vendors.get_vendor!(id)
 
-    with {:ok, %Vendor{}} <- Vendors.soft_delete(vendor) do
+    with {:ok, %Vendor{}} <- Vendors.delete_vendor(vendor) do
       send_resp(conn, :no_content, "")
     end
   end
