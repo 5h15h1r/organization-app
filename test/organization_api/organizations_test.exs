@@ -51,7 +51,7 @@ defmodule OrganizationApi.OrganizationsTest do
 
     test "delete_organization/1 deletes the organization" do
       organization = organization_fixture()
-      assert {:ok, %Organization{}} = Organizations.delete_organization(organization)
+      assert {:ok, %Organization{}} = Organizations.soft_delete(organization)
       assert_raise Ecto.NoResultsError, fn -> Organizations.get_organization!(organization.id) end
     end
 

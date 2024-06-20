@@ -19,7 +19,8 @@ defmodule OrganizationApi.Organizations do
 
   """
   def list_organizations do
-    Repo.all(Organization)
+    from(o in Organization, where: is_nil(o.deleted_at))
+    |> Repo.all()
   end
 
   @doc """
@@ -36,7 +37,10 @@ defmodule OrganizationApi.Organizations do
       ** (Ecto.NoResultsError)
 
   """
-  def get_organization!(id), do: Repo.get!(Organization, id)
+  def get_organization!(id) do
+    from(o in Organization, where: is_nil(o.deleted_at))
+    |> Repo.get!(id)
+  end
 
   @doc """
   Creates a organization.
@@ -88,9 +92,10 @@ defmodule OrganizationApi.Organizations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_organization(%Organization{} = organization) do
+  def soft_delete(%Organization{} = organization) do
     organization
-    |> Repo.delete()
+    |> Ecto.Changeset.change(%{deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    |> Repo.update()
     |> handle_repo_result("Unable to delete the organization.")
   end
 

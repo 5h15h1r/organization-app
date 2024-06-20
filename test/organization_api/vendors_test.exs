@@ -51,7 +51,7 @@ defmodule OrganizationApi.VendorsTest do
 
     test "delete_vendor/1 deletes the vendor" do
       vendor = vendor_fixture()
-      assert {:ok, %Vendor{}} = Vendors.delete_vendor(vendor)
+      assert {:ok, %Vendor{}} = Vendors.soft_delete(vendor)
       assert_raise Ecto.NoResultsError, fn -> Vendors.get_vendor!(vendor.id) end
     end
 

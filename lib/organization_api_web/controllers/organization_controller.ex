@@ -36,7 +36,7 @@ defmodule OrganizationApiWeb.OrganizationController do
   def delete(conn, %{"id" => id}) do
     organization = Organizations.get_organization!(id)
 
-    with {:ok, %Organization{}} <- Organizations.delete_organization(organization) do
+    with {:ok, %Organization{}} <- Organizations.soft_delete(organization) do
       send_resp(conn, :no_content, "")
     end
   end

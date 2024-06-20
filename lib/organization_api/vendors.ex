@@ -20,7 +20,8 @@ defmodule OrganizationApi.Vendors do
 
   """
   def list_vendors do
-    Repo.all(Vendor)
+    from(v in Vendor, where: is_nil(v.deleted_at))
+    |> Repo.all()
   end
 
   @doc """
@@ -37,8 +38,10 @@ defmodule OrganizationApi.Vendors do
       ** (Ecto.NoResultsError)
 
   """
-  def get_vendor!(id), do: Repo.get!(Vendor, id)
-
+  def get_vendor!(id) do
+  from(v in Vendor, where: is_nil(v.deleted_at))
+  |> Repo.get!(id)
+  end
   @doc """
   Creates a vendor.
 
@@ -89,10 +92,11 @@ defmodule OrganizationApi.Vendors do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_vendor(%Vendor{} = vendor) do
+  def soft_delete(%Vendor{} = vendor) do
     vendor
-    |> Repo.delete()
-    |> handle_repo_result("Unable to delete the vendor")
+    |> Ecto.Changeset.change(%{deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    |> Repo.update()
+    |> handle_repo_result("Unable to delete the organization.")
   end
 
   @doc """
