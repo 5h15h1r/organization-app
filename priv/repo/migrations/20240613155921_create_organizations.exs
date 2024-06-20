@@ -7,7 +7,7 @@ defmodule OrganizationApi.Repo.Migrations.CreateOrganizations do
       add :name, :string
       add :logo_url, :string
       add :configurations, :map
-      add :is_active, :boolean
+      add :is_active, :boolean, default: true
       timestamps(type: :utc_datetime)
     end
 
