@@ -7,8 +7,10 @@ defmodule OrganizationApi.Repo.Migrations.CreateOrganizations do
       add :name, :string
       add :logo_url, :string
       add :configurations, :map
-
+      add :is_active, :boolean
       timestamps(type: :utc_datetime)
     end
+
+    create index(:organizations, [:is_active])
   end
 end
