@@ -8,6 +8,7 @@ defmodule OrganizationApi.Vendors.Vendor do
     field :name, :string
     field :phone, :string
     field :email, :string
+    field :is_active, :boolean, default: true
     belongs_to :organization, OrganizationApi.Organizations.Organization
 
     timestamps(type: :utc_datetime)

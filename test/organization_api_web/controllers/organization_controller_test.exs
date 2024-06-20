@@ -4,6 +4,7 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
   import OrganizationApi.OrganizationsFixtures
 
   alias OrganizationApi.Organizations.Organization
+  alias OrganizationApi.Repo
 
   @create_attrs %{
     name: "some name",
@@ -79,6 +80,9 @@ defmodule OrganizationApiWeb.OrganizationControllerTest do
       conn = delete(conn, ~p"/api/organizations/#{organization}")
       assert response(conn, 204)
 
+      deleted_organization = Repo.get!(Organization, organization.id)
+      assert deleted_organization.is_active == false
+      
       assert_error_sent 404, fn ->
         get(conn, ~p"/api/organizations/#{organization}")
       end
