@@ -11,7 +11,7 @@ defmodule OrganizationApi.Vendors do
   alias OrganizationApi.Vendors.Vendor
 
   @doc """
-  Returns the list of vendors.
+  Returns the list of vendors which are active.
 
   ## Examples
 
@@ -20,14 +20,15 @@ defmodule OrganizationApi.Vendors do
 
   """
   def list_vendors do
-    from(v in Vendor, where: is_nil(v.deleted_at))
+    Vendor
+    |> where([v], v.is_active==true)
     |> Repo.all()
   end
 
   @doc """
   Gets a single vendor.
 
-  Raises `Ecto.NoResultsError` if the Vendor does not exist.
+  Raises `Ecto.NoResultsError` if the Vendor does not exist or is soft deleted.
 
   ## Examples
 
@@ -39,7 +40,8 @@ defmodule OrganizationApi.Vendors do
 
   """
   def get_vendor!(id) do
-  from(v in Vendor, where: is_nil(v.deleted_at))
+  Vendor
+  |> where([v], v.is_active==true)
   |> Repo.get!(id)
   end
   @doc """
@@ -81,7 +83,7 @@ defmodule OrganizationApi.Vendors do
   end
 
   @doc """
-  Deletes a vendor.
+  Soft deletes a vendor by changing the value of is_active to false .
 
   ## Examples
 
@@ -92,9 +94,9 @@ defmodule OrganizationApi.Vendors do
       {:error, %Ecto.Changeset{}}
 
   """
-  def soft_delete(%Vendor{} = vendor) do
+  def delete_vendor(%Vendor{} = vendor) do
     vendor
-    |> Ecto.Changeset.change(%{deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    |> Ecto.Changeset.change(%{is_active: false})
     |> Repo.update()
     |> handle_repo_result("Unable to delete the organization.")
   end

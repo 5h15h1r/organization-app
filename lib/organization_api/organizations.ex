@@ -10,7 +10,7 @@ defmodule OrganizationApi.Organizations do
   alias OrganizationApi.Organizations.Organization
 
   @doc """
-  Returns the list of organizations.
+  Returns the list of organizations are active.
 
   ## Examples
 
@@ -19,14 +19,15 @@ defmodule OrganizationApi.Organizations do
 
   """
   def list_organizations do
-    from(o in Organization, where: is_nil(o.deleted_at))
+    Organization
+    |> where([o], o.is_active==true)
     |> Repo.all()
   end
 
   @doc """
   Gets a single organization.
 
-  Raises `Ecto.NoResultsError` if the Organization does not exist.
+  Raises `Ecto.NoResultsError` if the Organization does not exist or is soft deleted.
 
   ## Examples
 
@@ -38,8 +39,10 @@ defmodule OrganizationApi.Organizations do
 
   """
   def get_organization!(id) do
-    from(o in Organization, where: is_nil(o.deleted_at))
+    Organization
+    |> where([o], o.is_active==true)
     |> Repo.get!(id)
+
   end
 
   @doc """
@@ -81,7 +84,7 @@ defmodule OrganizationApi.Organizations do
   end
 
   @doc """
-  Deletes a organization.
+  Soft deletes an organization by changing the value of is_active to false.
 
   ## Examples
 
@@ -92,9 +95,9 @@ defmodule OrganizationApi.Organizations do
       {:error, %Ecto.Changeset{}}
 
   """
-  def soft_delete(%Organization{} = organization) do
+  def delete_organization(%Organization{} = organization) do
     organization
-    |> Ecto.Changeset.change(%{deleted_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    |> Ecto.Changeset.change(%{is_active: false})
     |> Repo.update()
     |> handle_repo_result("Unable to delete the organization.")
   end
