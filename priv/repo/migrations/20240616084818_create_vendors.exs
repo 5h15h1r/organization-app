@@ -8,7 +8,7 @@ defmodule OrganizationApi.Repo.Migrations.CreateVendors do
       add :phone, :string
       add :email, :string
       add :organization_id, references(:organizations, on_delete: :nothing, type: :binary_id)
-      add :is_active, :boolean, default: true
+      add :is_active, :boolean, default: true, null: false
       timestamps(type: :utc_datetime)
     end
 
