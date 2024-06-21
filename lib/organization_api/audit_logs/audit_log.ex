@@ -20,7 +20,7 @@ defmodule OrganizationApi.AuditLogs.AuditLog do
 
   def changeset(audit_log, attrs) do
     audit_log
-    |> cast(attrs, [:organization_id, :user_id, :table_name, :action, :record_id, :old_data, :new_data, :ip_address, :user_agent])
+    |> cast(attrs, [:organization_id, :table_name, :action, :record_id, :old_data, :new_data, :ip_address, :user_agent])
     |> validate_required([:organization_id, :table_name, :action, :record_id])
   end
 end
