@@ -66,7 +66,7 @@ defmodule OrganizationApiWeb.VendorController do
         action: "delete",
         record_id: vendor.id,
         new_data: "",
-        old_data: vendor
+        old_data: struct_to_map(vendor)
       }
       with {:ok, %AuditLog{}} <- AuditLogs.create_audit_log(audit_params) do
         IO.puts("Audit Log generated")
