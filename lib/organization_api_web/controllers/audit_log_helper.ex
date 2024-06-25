@@ -1,6 +1,5 @@
 defmodule OrganizationApi.AuditLogHelper do
   alias OrganizationApi.AuditLogs
-  alias OrganizationApi.AuditLogs.AuditLog
 
   def create_audit_log(conn, organization_id, record_id, table_name, action, new_data, old_data \\ nil) do
     audit_params = %{
@@ -15,9 +14,8 @@ defmodule OrganizationApi.AuditLogHelper do
     }
 
     case AuditLogs.create_audit_log(audit_params) do
-      {:ok, %AuditLog{}} ->
-        IO.puts("Audit Log generated")
-        :ok
+      {:ok, %Oban.Job{}}->
+        IO.puts("Job created")
       {:error, reason} ->
         IO.puts("Failed to generate Audit Log : #{reason}")
         :error
