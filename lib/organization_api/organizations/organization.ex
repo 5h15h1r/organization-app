@@ -10,6 +10,7 @@ defmodule OrganizationApi.Organizations.Organization do
     field :configurations, :map
     field :is_active, :boolean, default: true
     has_many :vendors , OrganizationApi.Vendors.Vendor
+    has_many :audit_logs, OrganizationApi.AuditLogs.AuditLog
     timestamps(type: :utc_datetime)
   end
 
