@@ -3,10 +3,10 @@ defmodule OrganizationApi.AuditLogs do
   The Audit Log context.
   """
   import Ecto.Query, warn: false
-
+  import OrganizationApi.HandleError
   alias OrganizationApi.Repo
   alias OrganizationApi.AuditLogs.AuditLog
-  alias OrganizationApi.Workers.AuditLogWorker
+  # alias OrganizationApi.Workers.AuditLogWorker
 
   @doc """
   Create an audit log .
@@ -18,9 +18,10 @@ defmodule OrganizationApi.AuditLogs do
 
   """
   def create_audit_log(attrs \\ %{}) do
-    attrs
-    |> AuditLogWorker.new()
-    |> Oban.insert()
+    %AuditLog{}
+    |> AuditLog.changeset(attrs)
+    |> Repo.insert()
+    |> handle_repo_result("Unable to create the audit log.")
   end
 
   @doc """
