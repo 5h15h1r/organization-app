@@ -4,10 +4,10 @@ defmodule OrganizationApi.AuditLogs.AuditLog do
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-  @actions ["create", "update", "delete"]
+
   schema "audit_logs" do
     field :table_name, :string
-    field :action, :string
+    field :action, Ecto.Enum, values: [:create, :update, :delete]
     field :record_id, :binary_id
     field :old_data, :map
     field :new_data, :map
@@ -23,6 +23,5 @@ defmodule OrganizationApi.AuditLogs.AuditLog do
     audit_log
     |> cast(attrs, [:organization_id, :table_name, :action, :record_id, :old_data, :new_data, :ip_address, :user_agent])
     |> validate_required([:organization_id, :table_name, :action, :record_id])
-    |> validate_inclusion(:action, @actions)
   end
 end
