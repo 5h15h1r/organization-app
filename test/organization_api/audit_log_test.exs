@@ -21,7 +21,7 @@ defmodule OrganizationApi.AuditLogsTest do
       }
       assert {:ok, %AuditLog{} = audit_log} = AuditLogs.create_audit_log(valid_attrs)
       assert audit_log.table_name == "organizations"
-      assert audit_log.action == "update"
+      assert audit_log.action == :update
       assert audit_log.old_data == %{"name" => "John Doe"}
       assert audit_log.new_data == %{"name" => "Jane Doe"}
       assert audit_log.ip_address == "default ip_address"
@@ -40,7 +40,7 @@ defmodule OrganizationApi.AuditLogsTest do
     test "filter_audit_logs_by_table/1 returns audit_logs for a specific table" do
       audit_log1 = audit_log_fixture(%{table_name: "organizations"})
       audit_log2 = audit_log_fixture(%{table_name: "vendors"})
-      
+
       assert AuditLogs.filter_audit_logs_by_table("organizations") == [audit_log1]
       assert AuditLogs.filter_audit_logs_by_table("vendors") == [audit_log2]
     end
