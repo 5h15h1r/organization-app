@@ -9,16 +9,16 @@ defmodule OrganizationApiWeb.AuditLogPlug do
   end
 
   def log_action(conn, opts) do
-    action = to_string(conn.private.phoenix_action)
+    action = conn.private.phoenix_action
     resource_name = Keyword.fetch!(opts, :resource)
     resource = conn.assigns[resource_name]
-    if resource && action in ["create", "update", "delete"] do
+    if resource && action in [:create, :update, :delete] do
       record_id = Keyword.get(opts, :record_id, :id)
       org_id = conn.assigns[:org_id]
       table_name = Keyword.get(opts, :table_name, to_string(resource_name) <> "s")
 
       new_data = conn.assigns[:audit_new_data] ||
-                 (if action == "delete", do: "", else: AuditLogHelper.struct_to_map(resource))
+                 (if action == :delete, do: "", else: AuditLogHelper.struct_to_map(resource))
       old_data = conn.assigns[:audit_old_data]
 
       AuditLogHelper.create_audit_log(
