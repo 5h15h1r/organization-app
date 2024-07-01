@@ -10,6 +10,11 @@ import Config
 if config_env() in [:dev, :test] do
   import_config ".env.exs"
 end
+# Configures Oban
+config :organization_api, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [audit_logs: 10],
+  repo: OrganizationApi.Repo
 
 config :organization_api,
   ecto_repos: [OrganizationApi.Repo],

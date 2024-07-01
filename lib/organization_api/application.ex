@@ -12,6 +12,7 @@ defmodule OrganizationApi.Application do
       OrganizationApi.Repo,
       {DNSCluster, query: Application.get_env(:organization_api, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: OrganizationApi.PubSub},
+      {Oban, Application.fetch_env!(:organization_api, Oban)},
       # Start a worker by calling: OrganizationApi.Worker.start_link(arg)
       # {OrganizationApi.Worker, arg},
       # Start to serve requests, typically the last entry
