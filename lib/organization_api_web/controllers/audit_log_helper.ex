@@ -1,6 +1,5 @@
 defmodule OrganizationApi.AuditLogHelper do
-  alias OrganizationApi.AuditLogs
-  alias OrganizationApi.AuditLogs.AuditLog
+  alias OrganizationApi.Workers.AuditLogWorker
   def create_audit_log(conn, organization_id, record_id, table_name, action, new_data, old_data \\ nil) do
     audit_params = %{
       organization_id: organization_id,
@@ -13,11 +12,11 @@ defmodule OrganizationApi.AuditLogHelper do
       user_agent: get_user_agent(conn)
     }
 
-    case AuditLogs.create_audit_log(audit_params) do
-      {:ok, %AuditLog{}}->
-        IO.puts("Audit Log created")
+    case AuditLogWorker.new(audit_params) |> Oban.insert() do
+      {:ok, _job} ->
+        IO.puts("Audit Log job enqueued")
       {:error, reason} ->
-        IO.puts("Failed to generate Audit Log : #{reason}")
+        IO.puts("Failed to enqueue Audit Log job: #{inspect(reason)}")
         :error
     end
   end
