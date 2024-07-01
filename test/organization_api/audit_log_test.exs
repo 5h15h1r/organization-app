@@ -21,7 +21,7 @@ defmodule OrganizationApi.AuditLogsTest do
       }
       assert {:ok, %AuditLog{} = audit_log} = AuditLogs.create_audit_log(valid_attrs)
       assert audit_log.table_name == "organizations"
-      assert to_string(audit_log.action) == "update"
+      assert audit_log.action == :update
       assert audit_log.old_data == %{"name" => "John Doe"}
       assert audit_log.new_data == %{"name" => "Jane Doe"}
       assert audit_log.ip_address == "default ip_address"
