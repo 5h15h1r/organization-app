@@ -46,6 +46,16 @@ defmodule OrganizationApi.Workers.AuditLogWorkerTest do
         }
       )
     end
+    
+    test "does not enqueue an audit log job when an error occurs during job insertion" do
+      invalid_args = %{
+        organization_id: 123
+      }
+      assert {:error, %Ecto.Changeset{}} = perform_job(AuditLogWorker, invalid_args)
+
+      # Refute that a job with particular options has been enqueued.
+      refute_enqueued(worker: AuditLogWorker, args: %{organization_id: 123})
+    end
   end
 
   defp create_args(org) do
@@ -59,15 +69,5 @@ defmodule OrganizationApi.Workers.AuditLogWorkerTest do
       ip_address: "127.0.0.1",
       user_agent: "Test Agent"
     }
-  end
-
-  test "does not enqueue an audit log job when an error occurs during job insertion" do
-    invalid_args = %{
-      organization_id: 123
-    }
-    assert {:error, %Ecto.Changeset{}} = perform_job(AuditLogWorker, invalid_args)
-    
-    # Refute that a job with particular options has been enqueued.
-    refute_enqueued(worker: AuditLogWorker, args: %{organization_id: 123})
   end
 end
